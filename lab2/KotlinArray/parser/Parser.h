@@ -13,10 +13,7 @@ public:
 private:
     Tree* D() noexcept(false);
     Tree* K() noexcept(false);
-    Tree* N() noexcept(false);
-    Tree* A() noexcept(false);
     Tree* T() noexcept(false);
-    Tree* TPrime() noexcept(false);
 
 
 private:

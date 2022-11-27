@@ -36,6 +36,8 @@ void LexicalAnalyzer::nextToken() noexcept(false) {
 
     if (Keywords.find(builder) != Keywords.end()) {
         currentToken = Token::KEYWORD;
+    } else if (builder == Array) {
+        currentToken = Token::ARRAY;
     } else if (!builder.empty()) {
         currentToken = Token::NAME;
     } else if (currentChar == ':') {

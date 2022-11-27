@@ -17,11 +17,11 @@ Tree* Parser::parse() noexcept(false) {
 Tree* Parser::D() noexcept(false) {
     Tree* D = new Tree(NonTerminal::D);
     switch (lexicalAnalyzer.getToken()) {
-        case Token::KEYWORD:  // D -> K N : A < T >
+        case Token::KEYWORD:  // D -> K name : array < T >
             D->addChild(K());
-            D->addChild(N());
+            D->addChild(ensureTerminal(Token::NAME));
             D->addChild(ensureTerminal(Token::COLON));
-            D->addChild(A());
+            D->addChild(ensureTerminal(Token::ARRAY));
             D->addChild(ensureTerminal(Token::LANGLE));
             D->addChild(T());
             D->addChild(ensureTerminal(Token::RANGLE));
@@ -45,60 +45,23 @@ Tree* Parser::K() noexcept(false) {
     return K;
 }
 
-Tree* Parser::N() noexcept(false) {
-    Tree* N = new Tree(NonTerminal::N);
-    switch (lexicalAnalyzer.getToken()) {
-        case Token::NAME:  // N -> NAME
-            N->addChild(ensureTerminal(Token::NAME));
-            break;
-        default:
-            throwParseException({Token::NAME});
-    }
-    return N;
-}
-
-Tree* Parser::A() noexcept(false) {
-    Tree* A = new Tree(NonTerminal::A);
-    switch (lexicalAnalyzer.getToken()) {
-        case Token::NAME:  // A -> NAME
-            A->addChild(ensureTerminal(Token::NAME));
-            break;
-        default:
-            throwParseException({Token::NAME});
-    }
-    return A;
-}
-
 Tree* Parser::T() noexcept(false) {
-    Tree* T = new Tree(NonTerminal::T);
+    Tree* t = new Tree(NonTerminal::T);
     switch (lexicalAnalyzer.getToken()) {
-        case Token::NAME: // T -> NAME T'
-            T->addChild(ensureTerminal(Token::NAME));
-            T->addChild(TPrime());
+        case Token::NAME:  // T -> name
+            t->addChild(ensureTerminal(Token::NAME));
+            break;
+        case Token::ARRAY:  // T -> array < T >
+            t->addChild(ensureTerminal(Token::ARRAY));
+            t->addChild(ensureTerminal(Token::LANGLE));
+            t->addChild(T());
+            t->addChild(ensureTerminal(Token::RANGLE));
             break;
         default:
-            throwParseException({Token::NAME});
+            throwParseException({Token::NAME, Token::ARRAY});
     }
-    return T;
+    return t;
 }
-
-Tree* Parser::TPrime() noexcept(false) {
-    Tree* TPrime = new Tree(NonTerminal::TPRIME);
-    switch (lexicalAnalyzer.getToken()) {
-        case Token::LANGLE:  // T' -> < T >
-            TPrime->addChild(ensureTerminal(Token::LANGLE));
-            TPrime->addChild(T()); //
-            TPrime->addChild(ensureTerminal(Token::RANGLE));
-            break;
-        case Token::RANGLE:  // T' -> eps
-            TPrime->addChild(new Tree(Token::EPS));
-            break;
-        default:
-            throwParseException({Token::LANGLE, Token::RANGLE});
-    }
-    return TPrime;
-}
-
 
 Tree* Parser::ensureTerminal(FirstFollow::Terminal terminal) noexcept(false) {
     if (lexicalAnalyzer.getToken() != terminal) {

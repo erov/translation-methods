@@ -11,19 +11,13 @@
 enum class NonTerminal {
     D,
     K,
-    N,
-    A,
-    T,
-    TPRIME
+    T
 };
 
 static std::unordered_map<NonTerminal, std::string> NonTerminal2String = {
     {NonTerminal::D, "D"},
     {NonTerminal::K, "K"},
-    {NonTerminal::N, "N"},
-    {NonTerminal::A, "A"},
-    {NonTerminal::T, "T"},
-    {NonTerminal::TPRIME, "T'"}
+    {NonTerminal::T, "T"}
 };
 
 class FirstFollow {

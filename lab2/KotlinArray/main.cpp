@@ -24,26 +24,21 @@ auto buildRules() {
     FirstFollow::Rules_t result;
     result.push_back({NonTerminal::D, {
         NonTerminal::K,
-        NonTerminal::N,
-        Token::COLON,
-        NonTerminal::A,
-        Token::LANGLE,
-        NonTerminal::T,
-        Token::RANGLE
-    }});  // D -> K N: A<T>
-    result.push_back({NonTerminal::K, {Token::KEYWORD}});  // K -> KEYWORD
-    result.push_back({NonTerminal::N, {Token::NAME}});  // N -> NAME
-    result.push_back({NonTerminal::A, {Token::NAME}});  // A -> NAME
-    result.push_back({NonTerminal::T, {
         Token::NAME,
-        NonTerminal::TPRIME
-    }});  // T -> name T'
-    result.push_back({NonTerminal::TPRIME, {Token::EPS}});  // T' -> eps
-    result.push_back({NonTerminal::TPRIME, {
+        Token::COLON,
+        Token::ARRAY,
         Token::LANGLE,
         NonTerminal::T,
         Token::RANGLE
-    }});  // T' -> <T>
+    }});  // D -> K N: array <T>
+    result.push_back({NonTerminal::K, {Token::KEYWORD}});  // K -> keyword
+    result.push_back({NonTerminal::T, {Token::NAME}}); // T -> name
+    result.push_back({NonTerminal::T, {
+        Token::ARRAY,
+        Token::LANGLE,
+        NonTerminal::T,
+        Token::RANGLE
+    }}); // T -> array < T >
 
     return result;
 }

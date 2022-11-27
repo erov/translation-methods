@@ -11,6 +11,7 @@ enum class Token {
     EPS,
     NAME,
     KEYWORD,
+    ARRAY,
     LANGLE,
     RANGLE,
     COLON,
@@ -21,6 +22,7 @@ static std::unordered_map<Token, std::string> Token2String = {
     {Token::EPS, "EPS"},
     {Token::NAME, "NAME"},
     {Token::KEYWORD, "KEYWORD"},
+    {Token::ARRAY, "ARRAY"},
     {Token::LANGLE, "LANGLE"},
     {Token::RANGLE, "RANGLE"},
     {Token::COLON, "COLON"},
@@ -47,6 +49,7 @@ private:
     const std::unordered_set<std::string> Keywords = {
         "var"
     };
+    const std::string Array = "Array";
 
     std::string inputString;
     std::size_t currentPosition;
