@@ -35,7 +35,7 @@ T -> < T >
   
 Жадно набирает символы, пока не встретит пробел, конец строки, либо один из специальных символых, которыми не могут быть названы имена типов и переменных в Kotlin -- ```,;[]/<>:\```. После определит соотвествующий токен для выделенной строки. (```"var"``` -- это токен ```keyword```, ```"Array"``` -- это токен ```Array```, аналогично строки соответствующие односимвольным токенам грамматики.
 
-[Код лексического анализатора](lab2/KotlinArray/lexical-analyzer/) 
+[Код лексического анализатора](KotlinArray/lexical-analyzer/) 
   
 ## 3. Построение синтаксического анализатора
 
@@ -46,18 +46,18 @@ T -> < T >
 |K| KEYWORD | NAME |
 |T| ARRAY NAME | RANGLE |
 
-[Код, считающий эти множества](lab2/KotlinArray/helpers/)
+[Код, считающий эти множества](KotlinArray/helpers/)
   
 ## 4 Визуализация дерева разбора
 
-[Код парсера](lab2/KotlinArray/parser/)
+[Код парсера](KotlinArray/parser/)
 
-Для визуализации дерева разбора возпользовался тулзой GraphViz. Добавил в класс дерева метод [walkthroughGraphViz](lab2/KotlinArray/parser/Tree.cpp#L44), который генерирует конфиг нужного формата, для запуска. С помощью [скрипта](lab2/KotlinArray/visualizer/build_graph.sh) можно получить svg файл:
+Для визуализации дерева разбора возпользовался тулзой GraphViz. Добавил в класс дерева метод [walkthroughGraphViz](KotlinArray/parser/Tree.cpp#L44), который генерирует конфиг нужного формата, для запуска. С помощью [скрипта](KotlinArray/visualizer/build_graph.sh) можно получить svg файл:
 
 Пример разбора строки ```var array: Array<Array<Int>>;```:
 
-![alt text](lab2/KotlinArray/visualizer/output.svg)
+![alt text](KotlinArray/visualizer/output.svg)
   
 ## 5 Подготовка набора тестов
   
-25 корректных и неккоректных тестов с комментариями [здесь](lab2/KotlinArray/tests.cpp#L79).
+25 корректных и неккоректных тестов с комментариями [здесь](KotlinArray/tests.cpp#L79).
