@@ -23,13 +23,14 @@ std::size_t LexicalAnalyzer::getPosition() noexcept {
 void LexicalAnalyzer::nextToken() noexcept(false) {
     std::string builder;
 
-    while (currentChar != '\0'
-           && SpecialSymbols.find(currentChar) == std::string::npos
-           && Keywords.find(builder) == Keywords.end()) {
+    while (isSpace(currentChar)) {
+        nextChar();
+    }
 
-        while (isSpace(currentChar)) {
-            nextChar();
-        }
+    while (currentChar != '\0'
+           && !isSpace(currentChar)
+           && SpecialSymbols.find(currentChar) == std::string::npos) {
+
         builder += currentChar;
         nextChar();
     }
@@ -49,6 +50,9 @@ void LexicalAnalyzer::nextToken() noexcept(false) {
     } else if (currentChar == '>') {
         nextChar();
         currentToken = Token::RANGLE;
+    } else if (currentChar == ';') {
+        nextChar();
+        currentToken = Token::SEMICOLON;
     } else if (currentChar == '\0') {
         currentToken = Token::END;
     } else {

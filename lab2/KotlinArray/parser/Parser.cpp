@@ -17,7 +17,7 @@ Tree* Parser::parse() noexcept(false) {
 Tree* Parser::D() noexcept(false) {
     Tree* D = new Tree(NonTerminal::D);
     switch (lexicalAnalyzer.getToken()) {
-        case Token::KEYWORD:  // D -> K name : array < T >
+        case Token::KEYWORD:  // D -> K name : array < T > ;
             D->addChild(K());
             D->addChild(ensureTerminal(Token::NAME));
             D->addChild(ensureTerminal(Token::COLON));
@@ -25,6 +25,7 @@ Tree* Parser::D() noexcept(false) {
             D->addChild(ensureTerminal(Token::LANGLE));
             D->addChild(T());
             D->addChild(ensureTerminal(Token::RANGLE));
+            D->addChild(ensureTerminal(Token::SEMICOLON));
             D->addChild(ensureTerminal(Token::END));
             break;
         default:

@@ -15,6 +15,7 @@ enum class Token {
     LANGLE,
     RANGLE,
     COLON,
+    SEMICOLON,
     END
 };
 
@@ -26,6 +27,7 @@ static std::unordered_map<Token, std::string> Token2String = {
     {Token::LANGLE, "LANGLE"},
     {Token::RANGLE, "RANGLE"},
     {Token::COLON, "COLON"},
+    {Token::SEMICOLON, "SEMICOLON"},
     {Token::END, "END"}
 };
 

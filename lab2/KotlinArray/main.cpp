@@ -1,7 +1,7 @@
 #include "lexical-analyzer/LexicalAnalyzer.h"
 #include "helpers/FirstFollow.h"
-#include "parser/Tree.h"
 #include "parser/Parser.h"
+#include "parser/Tree.h"
 
 #include <iostream>
 #include <cassert>
@@ -29,8 +29,9 @@ auto buildRules() {
         Token::ARRAY,
         Token::LANGLE,
         NonTerminal::T,
-        Token::RANGLE
-    }});  // D -> K N: array <T>
+        Token::RANGLE,
+        Token::SEMICOLON
+    }});  // D -> K N: array <T> ;
     result.push_back({NonTerminal::K, {Token::KEYWORD}});  // K -> keyword
     result.push_back({NonTerminal::T, {Token::NAME}}); // T -> name
     result.push_back({NonTerminal::T, {
@@ -98,14 +99,14 @@ bool ensureLL1(FirstFollow& helper, FirstFollow::Rules_t& rules) {
     }
 
     if (ok) {
-        std::cerr << "[INFO] ok, grammar is in LL(1) class.\n\n";
+        std::cout << "[INFO] ok, grammar is in LL(1) class.\n\n";
     }
 
     return ok;
 }
 
 int main() {
-    checkLexicalAnalyzer("var array: Array<Array<Int>>");
+    checkLexicalAnalyzer("var array: Array<Array<Int>>;");
 
     auto rules = buildRules();
     auto helper = FirstFollow(rules);
@@ -120,8 +121,9 @@ int main() {
 
     assert(ensureLL1(helper, rules));
 
-    Parser parser("var array: Array<Array<Int>>");
+    Parser parser("var array: Array<Array<Int>>;");
     Tree* expr = parser.parse();
+    std::cout << "Parse result:\n";
     for (auto terminal : expr->walkthrough()) {
         std::cout << Token2String[terminal] << ' ';
     }

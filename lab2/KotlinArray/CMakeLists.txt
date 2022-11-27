@@ -16,3 +16,18 @@ add_executable(KotlinArray
     parser/Parser.h
     parser/Parser.cpp
 )
+
+add_executable(KotlinArrayTest
+    tests.cpp
+    lexical-analyzer/LexicalAnalyzer.h
+    lexical-analyzer/LexicalAnalyzer.cpp
+    lexical-analyzer/ParseException.h
+    lexical-analyzer/ParseException.cpp
+    helpers/FirstFollow.h
+    helpers/FirstFollow.cpp
+    parser/Tree.h
+    parser/Tree.cpp
+    parser/Parser.h
+    parser/Parser.cpp
+)
+

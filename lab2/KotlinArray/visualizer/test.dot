@@ -13,7 +13,8 @@ strict graph KotlinArray {
     12[label="NAME" shape=box color=green];
     13[label="RANGLE" shape=box color=green];
     14[label="RANGLE" shape=box color=green];
-    15[label="END" shape=box color=green];
+    15[label="SEMICOLON" shape=box color=green];
+    16[label="END" shape=box color=green];
     1 -- 2;
     2 -- 3;
     1 -- 4;
@@ -28,4 +29,5 @@ strict graph KotlinArray {
     8 -- 13;
     1 -- 14;
     1 -- 15;
+    1 -- 16;
 }
