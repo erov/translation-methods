@@ -130,4 +130,6 @@ int main() {
     std::cout << '\n';
 
     expr->walkthroughGraphviz("../visualizer/test.dot");
+
+    delete expr;
 }

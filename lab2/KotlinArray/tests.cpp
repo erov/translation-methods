@@ -36,6 +36,7 @@ bool expectSuccess(const std::string& testName,
         Parser parser(input);
         Tree* tree = parser.parse();
         result = tree->walkthrough();
+        delete tree;
         if (isEqual(result, expectedResult)) {
             std::cerr << "[ OK ] Test '" << testName << "' completed successfully.\nInput: '" << input << "'\n\n";
             return true;
@@ -63,6 +64,7 @@ bool expectFailure(const std::string& testName,
         Parser parser(input);
         Tree* tree = parser.parse();
         result = tree->walkthrough();
+        delete tree;
         std::cerr << "[FAIL] Test '" << testName << "' unexpectedly didn't fail.\nInput: '" << input << "'\nResult: '";
         print(result);
         std::cerr << "'\n\n";
