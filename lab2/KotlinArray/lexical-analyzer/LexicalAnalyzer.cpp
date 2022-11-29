@@ -35,12 +35,16 @@ void LexicalAnalyzer::nextToken() noexcept(false) {
         nextChar();
     }
 
+    auto genericTypesIter = GenericTypes.find(builder);
     if (Keywords.find(builder) != Keywords.end()) {
         currentToken = Token::KEYWORD;
-    } else if (builder == Array) {
-        currentToken = Token::ARRAY;
+    } else if (genericTypesIter != GenericTypes.end()) {
+        currentToken = genericTypesIter->second;
     } else if (!builder.empty()) {
         currentToken = Token::NAME;
+    } else if (currentChar == ',') {
+        nextChar();
+        currentToken = Token::COMMA;
     } else if (currentChar == ':') {
         nextChar();
         currentToken = Token::COLON;

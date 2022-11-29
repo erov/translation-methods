@@ -12,7 +12,7 @@ public:
 
 private:
     Tree* D() noexcept(false);
-    Tree* K() noexcept(false);
+    Tree* G() noexcept(false);
     Tree* T() noexcept(false);
 
 

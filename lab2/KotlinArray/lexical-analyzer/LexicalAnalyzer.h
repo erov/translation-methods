@@ -12,6 +12,8 @@ enum class Token {
     NAME,
     KEYWORD,
     ARRAY,
+    MAP,
+    COMMA,
     LANGLE,
     RANGLE,
     COLON,
@@ -24,6 +26,8 @@ static std::unordered_map<Token, std::string> Token2String = {
     {Token::NAME, "NAME"},
     {Token::KEYWORD, "KEYWORD"},
     {Token::ARRAY, "ARRAY"},
+    {Token::MAP, "MAP"},
+    {Token::COMMA, "COMMA"},
     {Token::LANGLE, "LANGLE"},
     {Token::RANGLE, "RANGLE"},
     {Token::COLON, "COLON"},
@@ -51,7 +55,10 @@ private:
     const std::unordered_set<std::string> Keywords = {
         "var"
     };
-    const std::string Array = "Array";
+    const std::unordered_map<std::string, Token> GenericTypes = {
+        {"Array", Token::ARRAY},
+        {"Map", Token::MAP}
+    };
 
     std::string inputString;
     std::size_t currentPosition;

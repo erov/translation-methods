@@ -17,14 +17,11 @@ Tree* Parser::parse() noexcept(false) {
 Tree* Parser::D() noexcept(false) {
     Tree* D = new Tree(NonTerminal::D);
     switch (lexicalAnalyzer.getToken()) {
-        case Token::KEYWORD:  // D -> K name : array < T > ;
-            D->addChild(K());
+        case Token::KEYWORD:  // D -> keyword name : G ;
+            D->addChild(ensureTerminal(Token::KEYWORD));
             D->addChild(ensureTerminal(Token::NAME));
             D->addChild(ensureTerminal(Token::COLON));
-            D->addChild(ensureTerminal(Token::ARRAY));
-            D->addChild(ensureTerminal(Token::LANGLE));
-            D->addChild(T());
-            D->addChild(ensureTerminal(Token::RANGLE));
+            D->addChild(G());
             D->addChild(ensureTerminal(Token::SEMICOLON));
             D->addChild(ensureTerminal(Token::END));
             break;
@@ -34,16 +31,27 @@ Tree* Parser::D() noexcept(false) {
     return D;
 }
 
-Tree* Parser::K() noexcept(false) {
-    Tree* K = new Tree(NonTerminal::K);
+Tree* Parser::G() noexcept(false) {
+    Tree* G = new Tree(NonTerminal::G);
     switch (lexicalAnalyzer.getToken()) {
-        case Token::KEYWORD:  // K -> KEYWORD
-            K->addChild(ensureTerminal(Token::KEYWORD));
+        case Token::ARRAY:  // G -> array < T >
+            G->addChild(ensureTerminal(Token::ARRAY));
+            G->addChild(ensureTerminal(Token::LANGLE));
+            G->addChild(T());
+            G->addChild(ensureTerminal(Token::RANGLE));
+            break;
+        case Token::MAP:  // G -> map < T, T >
+            G->addChild(ensureTerminal(Token::MAP));
+            G->addChild(ensureTerminal(Token::LANGLE));
+            G->addChild(T());
+            G->addChild(ensureTerminal(Token::COMMA));
+            G->addChild(T());
+            G->addChild(ensureTerminal(Token::RANGLE));
             break;
         default:
-            throwParseException({Token::KEYWORD});
+            throwParseException({Token::ARRAY, Token::MAP});
     }
-    return K;
+    return G;
 }
 
 Tree* Parser::T() noexcept(false) {
@@ -52,14 +60,12 @@ Tree* Parser::T() noexcept(false) {
         case Token::NAME:  // T -> name
             t->addChild(ensureTerminal(Token::NAME));
             break;
-        case Token::ARRAY:  // T -> array < T >
-            t->addChild(ensureTerminal(Token::ARRAY));
-            t->addChild(ensureTerminal(Token::LANGLE));
-            t->addChild(T());
-            t->addChild(ensureTerminal(Token::RANGLE));
+        case Token::ARRAY:  // T -> G
+        case Token::MAP:
+            t->addChild(G());
             break;
         default:
-            throwParseException({Token::NAME, Token::ARRAY});
+            throwParseException({Token::NAME, Token::ARRAY, Token::MAP});
     }
     return t;
 }

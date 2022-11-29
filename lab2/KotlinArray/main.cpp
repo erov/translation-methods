@@ -23,23 +23,32 @@ void checkLexicalAnalyzer(const std::string& sample) {
 auto buildRules() {
     FirstFollow::Rules_t result;
     result.push_back({NonTerminal::D, {
-        NonTerminal::K,
+        Token::KEYWORD,
         Token::NAME,
         Token::COLON,
-        Token::ARRAY,
-        Token::LANGLE,
-        NonTerminal::T,
-        Token::RANGLE,
+        NonTerminal::G,
         Token::SEMICOLON
-    }});  // D -> K N: array <T> ;
-    result.push_back({NonTerminal::K, {Token::KEYWORD}});  // K -> keyword
-    result.push_back({NonTerminal::T, {Token::NAME}}); // T -> name
-    result.push_back({NonTerminal::T, {
+    }});  // D -> keyword name : G ;
+    result.push_back({NonTerminal::G, {
         Token::ARRAY,
         Token::LANGLE,
         NonTerminal::T,
         Token::RANGLE
-    }}); // T -> array < T >
+    }});  // G -> array < T >
+    result.push_back({NonTerminal::G, {
+        Token::MAP,
+        Token::LANGLE,
+        NonTerminal::T,
+        Token::COMMA,
+        NonTerminal::T,
+        Token::RANGLE
+    }});  // G -> map < T, T >
+    result.push_back({NonTerminal::T, {
+        Token::NAME
+    }});  // T -> name
+    result.push_back({NonTerminal::T, {
+        NonTerminal::G
+    }}); // T -> G
 
     return result;
 }
@@ -106,7 +115,7 @@ bool ensureLL1(FirstFollow& helper, FirstFollow::Rules_t& rules) {
 }
 
 int main() {
-    checkLexicalAnalyzer("var array: Array<Array<Int>>;");
+    checkLexicalAnalyzer("var array: Array<Array<Map<Int, Map<String, Array<Double>>>>>;");
 
     auto rules = buildRules();
     auto helper = FirstFollow(rules);
@@ -121,7 +130,7 @@ int main() {
 
     assert(ensureLL1(helper, rules));
 
-    Parser parser("var array: Array<Array<Int>>;");
+    Parser parser("var array: Array<Array<Map<Int, Map<String, Array<Double>>>>>;");
     Tree* expr = parser.parse();
     std::cout << "Parse result:\n";
     for (auto terminal : expr->walkthrough()) {
