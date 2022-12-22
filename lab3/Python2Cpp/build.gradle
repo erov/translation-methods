@@ -1,0 +1,25 @@
+plugins {
+    id 'antlr'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    antlr 'org.antlr:antlr4:4.9.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+generateGrammarSource {
+    arguments += [
+            "-Werror", "-long-messages"
+    ]
+}
+
+task execute(type:JavaExec) {
+    main = "Main"
+    classpath = sourceSets.main.runtimeClasspath
+}
