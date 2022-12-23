@@ -28,7 +28,8 @@ public class Main {
                 "else :\n" +
                 "    z = input()\n" +
                 "    l = input()\n" +
-
+                "    if \"z\" == \"l\":\n" +
+                "        print(\"ok\")\n" +
                 "c = int(input())\n" +
                 "\n\n"
                 ));
