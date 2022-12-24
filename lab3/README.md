@@ -56,6 +56,7 @@ if a != b:
 string = "Is there else-branch?"
 
 ```
+![](/lab3/python.png)
 
 > C
 ```
@@ -113,4 +114,4 @@ int main(int argc, char** argv) {
 }
 ```
 
-## Результат компиляции (интерпретации)
+![](/lab3/c.png)
