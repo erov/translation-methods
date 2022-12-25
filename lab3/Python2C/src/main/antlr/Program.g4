@@ -2,9 +2,9 @@ grammar Program;
 
 // Parser rules
 
-program : line  (NEWLINE line?)* EOF ;
+program : indent line (NEWLINE indent line?)* EOF ;
 
-line : indent (print | if_ | else_ | declaration) ;
+line : (print | if_ | else_ | declaration) ;
 
 indent : WHITESPACE? ;
 
@@ -51,7 +51,8 @@ boolean_d_prime : ('and' WHITESPACE? boolean_c WHITESPACE? boolean_d_prime | );
 boolean_c : (boolean_b_parentheses
            | BOOLEAN
            | boolean_variable
-           | 'not' WHITESPACE? boolean_b ) ;
+           | 'not' WHITESPACE? boolean_b
+           | comparison ) ;
 boolean_b_parentheses : '(' WHITESPACE? boolean_b WHITESPACE?  ')' ;
 boolean_variable : VARIABLE ;
 
@@ -81,6 +82,6 @@ COMPARISON : '<=' | '<' | '>=' | '>' | '==' | '!=' ;
 INT : ('+' | '-')? [0-9]+ ;
 CHAR : '\'' [a-zA-Z0-9_\-+] '\'' ;
 BOOLEAN : 'True' | 'False' ;
-STRING : '"' [a-zA-Z0-9_\-+ !?.,]* '"' ;
+STRING : '"' [a-zA-Z0-9_\-+ !?.,:]* '"' ;
 
 VARIABLE : [a-zA-Z_] [a-zA-Z_0-9]* ;

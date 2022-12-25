@@ -31,5 +31,15 @@ public class Main {
         ProgramParserListener listener = new ProgramParserListener();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, programContext);
+
+        if (args.length == 2) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[1]), StandardCharsets.UTF_8))) {
+                writer.write(listener.getResult());
+            } catch (IOException e) {
+                System.err.println("Error occurred while writing result into file");
+            }
+        } else {
+            System.out.println(listener.getResult());
+        }
     }
 }

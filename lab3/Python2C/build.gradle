@@ -23,3 +23,12 @@ task execute(type:JavaExec) {
     main = "Main"
     classpath = sourceSets.main.runtimeClasspath
 }
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat "full"
+        events "passed", "failed"
+        showStandardStreams true
+    }
+}

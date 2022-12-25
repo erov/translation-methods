@@ -54,6 +54,10 @@ public class ProgramParserListener extends ProgramBaseListener {
         }
     }
 
+    public String getResult() {
+        return stringBuilder.toString();
+    }
+
     @Override
     public void enterProgram(ProgramParser.ProgramContext ctx) {
         stringBuilder
@@ -66,7 +70,7 @@ public class ProgramParserListener extends ProgramBaseListener {
     @Override
     public void exitProgram(ProgramParser.ProgramContext ctx) {
         stringBuilder.append("\n}\n\n");
-        System.out.println(stringBuilder);
+//        System.out.println(stringBuilder);
     }
 
     @Override
@@ -81,7 +85,7 @@ public class ProgramParserListener extends ProgramBaseListener {
             stringBuilder.append(" ".repeat(tabs + 4));
             return;
         }
-        if (len < tabs && (tabs - len) % 4 == 0 && lastTabsIncrease + 1 != lineNumber) {
+        if (len <= tabs && (tabs - len) % 4 == 0 && lastTabsIncrease + 1 != lineNumber) {
             while (len != tabs) {
                 tabs -= 4;
                 stringBuilder
@@ -286,7 +290,7 @@ public class ProgramParserListener extends ProgramBaseListener {
                 printValuesBuilder.append(text);
             } else if (isBool(text) || declaredVariables.containsKey(text) && declaredVariables.get(text) == Type.BOOL) {
                 printFormatBuilder.append("%d ");
-                printValuesBuilder.append(text);
+                printValuesBuilder.append(terminalRenaming.getOrDefault(text, text));
             } else if (isChar(text) || declaredVariables.containsKey(text) && declaredVariables.get(text) == Type.CHAR) {
                 printFormatBuilder.append("%c ");
                 printValuesBuilder.append(text);
