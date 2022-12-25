@@ -116,3 +116,81 @@ int main(int argc, char** argv) {
 ```
 
 ![](/lab3/c.png)
+
+
+## Тестирование
+```
+$ ./Python2C/gradlew clean build test
+
+> Task :test
+
+Python2CTests > test_09_simpleIf() STANDARD_ERROR
+    Success of compiling file 'c/simple-if.c'!
+
+Python2CTests > test_09_simpleIf() PASSED
+
+Python2CTests > test_04_outputPrinting() STANDARD_ERROR
+    Success of compiling file 'c/output.c'!
+
+Python2CTests > test_04_outputPrinting() PASSED
+
+Python2CTests > test_05_inputOutput() STANDARD_ERROR
+    Success of compiling file 'c/input-output.c'!
+
+Python2CTests > test_05_inputOutput() PASSED
+
+Python2CTests > test_12_ifElse() STANDARD_ERROR
+    Success of compiling file 'c/if-else.c'!
+
+Python2CTests > test_12_ifElse() PASSED
+
+Python2CTests > test_07_boolExpression() STANDARD_ERROR
+    Success of compiling file 'c/bool-expression.c'!
+
+Python2CTests > test_07_boolExpression() PASSED
+
+Python2CTests > test_01_primitivesDeclaration() STANDARD_ERROR
+    Success of compiling file 'c/primitives.c'!
+
+Python2CTests > test_01_primitivesDeclaration() PASSED
+
+Python2CTests > test_06_intExpression() STANDARD_ERROR
+    Success of compiling file 'c/int-expression.c'!
+
+Python2CTests > test_06_intExpression() PASSED
+
+Python2CTests > test_08_comparison() STANDARD_ERROR
+    Success of compiling file 'c/comparison.c'!
+
+Python2CTests > test_08_comparison() PASSED
+
+Python2CTests > test_11_ifReentrancy() STANDARD_ERROR
+    Success of compiling file 'c/if-reentrancy.c'!
+
+Python2CTests > test_11_ifReentrancy() PASSED
+
+Python2CTests > test_10_complicatedIf() STANDARD_ERROR
+    Success of compiling file 'c/complicated-if.c'!
+
+Python2CTests > test_10_complicatedIf() PASSED
+
+Python2CTests > test_02_assignment() STANDARD_ERROR
+    Success of compiling file 'c/assignment.c'!
+
+Python2CTests > test_02_assignment() PASSED
+
+Python2CTests > test_03_inputReading() STANDARD_ERROR
+    Success of compiling file 'c/input.c'!
+
+Python2CTests > test_03_inputReading() PASSED
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+See https://docs.gradle.org/7.4/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD SUCCESSFUL in 2s
+6 actionable tasks: 6 executed
+
+```
