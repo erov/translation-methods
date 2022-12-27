@@ -16,7 +16,8 @@ declaration : (int_declaration
              | input_declaration
              | int_input_declaration
              | int_expression_declaration
-             | boolean_expression_declaration ) ;
+             | boolean_expression_declaration
+             | swap_declaration ) ;
 
 int_declaration : variable_assignment INT WHITESPACE? ;
 char_declaration : variable_assignment CHAR WHITESPACE? ;
@@ -27,6 +28,14 @@ input_declaration : input_variable_declaration input_call WHITESPACE? ;
 int_input_declaration : input_variable_declaration int_input_call WHITESPACE? ;
 int_expression_declaration : variable_assignment int_e WHITESPACE? ;
 boolean_expression_declaration : variable_assignment boolean_b WHITESPACE? ;
+swap_declaration : declared_variable
+                    WHITESPACE?
+                    (',' WHITESPACE? declared_variable WHITESPACE?)+
+                    '='
+                    WHITESPACE?
+                    declared_variable
+                    WHITESPACE?
+                    (',' WHITESPACE? declared_variable WHITESPACE?)+ ;
 
 
 variable_assignment : VARIABLE WHITESPACE? '=' WHITESPACE? ;

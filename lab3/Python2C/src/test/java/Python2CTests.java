@@ -90,4 +90,14 @@ public class Python2CTests {
         run("if-else");
     }
 
+    @Test
+    public void test_13_swap() {
+        run("swap");
+    }
+
+    @Test
+    public void test_14_swapComplicated() {
+        run("complicated-swap");
+    }
+
 }

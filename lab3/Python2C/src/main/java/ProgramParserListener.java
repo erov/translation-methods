@@ -2,6 +2,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,6 +17,12 @@ public class ProgramParserListener extends ProgramBaseListener {
     private int tabs = 0;
     private boolean enableElseKeywordThisTab = false;
     private boolean nowIsElseBranch = false;
+
+    private boolean inSwap = false;
+    private ArrayList<String> swapVariables;
+    private int swapLeft = 0;
+    private boolean inSwapLeft = false;
+
     private int lastTabsIncrease = -1;
     private int lineNumber = -1;
     private final Map<String, Type> declaredVariables = new HashMap<>();
@@ -172,8 +179,51 @@ public class ProgramParserListener extends ProgramBaseListener {
         typeCheck(ctx.variable_assignment().VARIABLE().getText(), Type.INT, false);
     }
 
-    @Override public void enterBoolean_expression_declaration(ProgramParser.Boolean_expression_declarationContext ctx) {
+    @Override
+    public void enterBoolean_expression_declaration(ProgramParser.Boolean_expression_declarationContext ctx) {
         typeCheck(ctx.variable_assignment().VARIABLE().getText(), Type.BOOL, false);
+    }
+
+    @Override
+    public void enterSwap_declaration(ProgramParser.Swap_declarationContext ctx) {
+        inSwap = true;
+        inSwapLeft = true;
+        swapLeft = 0;
+        swapVariables = new ArrayList<>();
+    }
+
+    @Override public void exitSwap_declaration(ProgramParser.Swap_declarationContext ctx) {
+        inSwap = false;
+        Type type = declaredVariables.get(swapVariables.get(0));
+        swapVariables.forEach(var -> typeCheck(var, type, false));
+        if (swapLeft * 2 != swapVariables.size()) {
+            throw new TranslatorException("Swap expression must have the same number of args both sides");
+        }
+        for (int i = 0; i != swapLeft; ++i) {
+            String originalVariable = swapVariables.get(i);
+            if (i != 0) {
+                stringBuilder.append(" ".repeat(tabs + 4));
+            }
+            typeCheck(originalVariable + "_1", type, false);
+            stringBuilder
+                    .append(originalVariable).append("_1")
+                    .append('=')
+                    .append(originalVariable)
+                    .append(';')
+                    .append('\n');
+        }
+        for (int i = swapLeft; i != swapVariables.size(); ++i) {
+            String lhs = swapVariables.get(i - swapLeft);
+            String rhs = swapVariables.get(i);
+            stringBuilder
+                    .append(" ".repeat(tabs + 4))
+                    .append(lhs)
+                    .append('=')
+                    .append(declaredVariables.containsKey(rhs + "_1") ? rhs + "_1" : rhs);
+            if (i + 1 != swapVariables.size()) {
+                stringBuilder.append(";\n");
+            }
+        }
     }
 
     @Override
@@ -298,6 +348,20 @@ public class ProgramParserListener extends ProgramBaseListener {
                 printFormatBuilder.append("%s ");
                 printValuesBuilder.append(text);
             }
+            return;
+        }
+        if (inSwap) {
+            if (Objects.equals(text, ",")) {
+                return;
+            }
+            if (Objects.equals(text, "=")) {
+                inSwapLeft = false;
+                return;
+            }
+            if (inSwapLeft) {
+                ++swapLeft;
+            }
+            swapVariables.add(text);
             return;
         }
         stringBuilder.append(terminalRenaming.getOrDefault(text, text));
