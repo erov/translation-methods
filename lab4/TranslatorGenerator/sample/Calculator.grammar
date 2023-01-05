@@ -1,0 +1,10 @@
+e -> t e_prime
+e_prime -> '+' t e_prime
+e_prime -> '-' t e_prime
+e_prime -> ''
+t -> f t_prime
+t_prime -> '*' f t_prime
+t_prime -> '/' f t_prime
+t_prime -> ''
+f -> [0-9]+
+f -> '(' e ')'
