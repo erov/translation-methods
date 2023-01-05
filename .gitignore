@@ -6,3 +6,5 @@ lab3/Python2Cpp/build/
 lab3/Python2C/.*
 lab3/Python2C/build/
 lab3/Python2C/a.out
+lab4/TranslatorGenerator/.*
+lab4/TranslatorGenerator/build/
