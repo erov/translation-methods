@@ -3,6 +3,12 @@ plugins {
     id 'java'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(19)
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -24,11 +30,11 @@ task execute(type:JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-//tasks.withType(Test) {
-//    useJUnitPlatform()
-//    testLogging {
-//        exceptionFormat "full"
-//        events "passed", "failed"
-//        showStandardStreams true
-//    }
-//}
+tasks.withType(Test) {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat "full"
+        events "passed", "failed"
+        showStandardStreams true
+    }
+}

@@ -4,6 +4,7 @@ import grammar.GrammarItem;
 import grammar.NonTerminal;
 import grammar.Terminal;
 import grammar.Type;
+import helpers.LL1Helper;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -23,7 +24,7 @@ public class Tree {
     public Map<String, String> synthesizedAttr = new HashMap<>();
 
 
-    private class Edge {
+    private static class Edge {
         private final int from;
         private final int to;
 
@@ -63,6 +64,12 @@ public class Tree {
         this.type = type;
     }
 
+    public List<Terminal> walkthrough() {
+        final List<Terminal> result = new ArrayList<>();
+        walkthroughImpl(result, this);
+        return result;
+    }
+
     public void walkthroughGraphviz(String path) {
         final List<Edge> edges = new ArrayList<>();
         final List<String> nodeConfig = new ArrayList<>();
@@ -83,6 +90,16 @@ public class Tree {
         }
     }
 
+
+    private void walkthroughImpl(final List<Terminal> result, Tree tree) {
+        if (tree.children.isEmpty() && !tree.node.equals(LL1Helper.EPS)) {
+            result.add((Terminal) tree.node);
+            return;
+        }
+        for (Tree child : tree.children) {
+            walkthroughImpl(result, child);
+        }
+    }
 
     private void walkthroughGraphvizImpl(List<Edge> edges, List<String> nodeConfig, Tree tree) {
         int treeID = nodeConfig.size();

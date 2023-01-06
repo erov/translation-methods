@@ -11,20 +11,12 @@ public class Utils {
                             final Map<String, String> synthesizedAttr,
                             final String synthesizedPrefix) throws ParseException {
         switch (translationSymbol) {
-            case "$ADD":
-                $ADD(inhAttr, synthesizedAttr, synthesizedPrefix);
-                break;
-            case "$SUB":
-                $SUB(inhAttr, synthesizedAttr, synthesizedPrefix);
-                break;
-            case "$MUL":
-                $MUL(inhAttr, synthesizedAttr, synthesizedPrefix);
-                break;
-            case "$DIV":
-                $DIV(inhAttr, synthesizedAttr, synthesizedPrefix);
-                break;
-            default:
-                throw new ParseException(String.format("Unexpected translation symbol found: '%s'", translationSymbol));
+            case "$ADD" -> $ADD(inhAttr, synthesizedAttr, synthesizedPrefix);
+            case "$SUB" -> $SUB(inhAttr, synthesizedAttr, synthesizedPrefix);
+            case "$MUL" -> $MUL(inhAttr, synthesizedAttr, synthesizedPrefix);
+            case "$DIV" -> $DIV(inhAttr, synthesizedAttr, synthesizedPrefix);
+            default ->
+                    throw new ParseException(String.format("Unexpected translation symbol found: '%s'", translationSymbol));
         }
     }
 
