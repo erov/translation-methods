@@ -1,0 +1,6 @@
+d -> 'var' name ':' g ';'
+g -> 'Array' '<' t '>'
+g -> 'Map' '<' t ',' t '>'
+t -> name
+t -> g
+name -> [a-zA-Z0-9]+
