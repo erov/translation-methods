@@ -9,14 +9,15 @@ public class Rule {
     private final NonTerminal lhs;
     private final List<GrammarItem> rhs;
     private final Type type;
-    public final Map<String, String> attributeAssignments = new HashMap<>();
+    private final Map<String, String> attributeAssignments;
 
 
 
-    public Rule(final String lhs, final List<GrammarItem> rhs, final Type type) {
+    public Rule(final String lhs, final List<GrammarItem> rhs, final Type type, final Map<String, String> attributeAssignments) {
         this.lhs = new NonTerminal(lhs);
         this.rhs = new ArrayList<>(rhs);
         this.type = type;
+        this.attributeAssignments = attributeAssignments;
     }
 
     public NonTerminal getLhs() {
@@ -29,5 +30,9 @@ public class Rule {
 
     public Type getType() {
         return type;
+    }
+
+    public Map<String, String> getAttributeAssignments() {
+        return attributeAssignments;
     }
 }

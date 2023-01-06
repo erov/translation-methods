@@ -8,8 +8,35 @@ e_prime -> '+' t $ADD e_prime {
     e_prime_4.lhs = $ADD.result
     e_prime_0.result = e_prime_4.result
 }
-e_prime -> ''
-t -> [0-9]+
-t -> '(' e ')' {
-    t_0.result = e_2.result
+e_prime -> '-' t $SUB e_prime {
+    $SUB.op0 = e_prime_0.lhs
+    $SUB.op1 = t_2.result
+    e_prime_4.lhs = $SUB.result
+    e_prime_0.result = e_prime_4.result
+}
+e_prime -> '' {
+    e_prime_0.result = e_prime_0.lhs
+}
+t -> f t_prime {
+    t_0.result = t_prime_2.result
+    t_prime_2.lhs = f_1.result
+}
+t_prime -> '*' f $MUL t_prime {
+    $MUL.op0 = t_prime_0.lhs
+    $MUL.op1 = f_2.result
+    t_prime_4.lhs = $MUL.result
+    t_prime_0.result = t_prime_4.result
+}
+t_prime -> '/' f $DIV t_prime {
+    $DIV.op0 = t_prime_0.lhs
+    $DIV.op1 = f_2.result
+    t_prime_4.lhs = $DIV.result
+    t_prime_0.result = t_prime_4.result
+}
+t_prime -> '' {
+    t_prime_0.result = t_prime_0.lhs
+}
+f -> [0-9]+
+f -> '(' e ')' {
+    f_0.result = e_2.result
 }

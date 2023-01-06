@@ -13,6 +13,7 @@ import parser.Tree;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -56,9 +57,8 @@ public class Main {
         }
 
         System.out.println("\nSample:");
-        String sample = "1 + 2 + 3 + 4 + 5"; // -13
-        // 1 - (2 - (3 - (4 - 5))) = 3
-        // 1 - 2 - 3 - 4 - 5
+        String sample = "(132 + 131) / 200 * 9993 - 56 * 7 / 1 * (0 - 1)";
+
         try {
             LexicalAnalyzer.checkLexicalAnalyzer(terminals, sample);
         } catch (ParseException e) {
@@ -81,11 +81,13 @@ public class Main {
         try {
             LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(terminals, sample);
             Parser parser = new Parser(lexicalAnalyzer, ll1Helper);
-            tree = parser.parse(start);
+            tree = parser.parse(start, Map.of());
             tree.walkthroughGraphviz("visualizer/test.dot");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
+        System.err.println(tree.synthesizedAttr.get("e_0.result"));
 
 
 //        if (args.length == 2) {

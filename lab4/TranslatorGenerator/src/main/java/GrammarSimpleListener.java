@@ -20,11 +20,19 @@ public class GrammarSimpleListener extends GrammarBaseListener {
     @Override
     public void enterGrammar_rule(GrammarParser.Grammar_ruleContext ctx) {
         lastRhs = new ArrayList<>();
+        lastAttributeAssignment = new ArrayList<>();
     }
 
     @Override
     public void exitGrammar_rule(GrammarParser.Grammar_ruleContext ctx) {
-        rules.add(new Rule(lastLhs, lastRhs, lastRuleType));
+        Map<String, String> attributeAssignments = new HashMap<>();
+        if (!lastAttributeAssignment.isEmpty()) {
+            assert(lastAttributeAssignment.size() % 2 == 0);
+            for (int i = 0; i != lastAttributeAssignment.size(); i += 2) {
+                attributeAssignments.put(lastAttributeAssignment.get(i), lastAttributeAssignment.get(i + 1));
+            }
+        }
+        rules.add(new Rule(lastLhs, lastRhs, lastRuleType, attributeAssignments));
         nowInRhs = false;
     }
 
@@ -44,7 +52,6 @@ public class GrammarSimpleListener extends GrammarBaseListener {
     public void enterParser_rule(GrammarParser.Parser_ruleContext ctx) {
         lastLhs = ctx.non_terminal(0).getText();
         lastRuleType = Type.PARSER;
-        lastAttributeAssignment = new ArrayList<>();
     }
 
     @Override
@@ -71,6 +78,17 @@ public class GrammarSimpleListener extends GrammarBaseListener {
 
     @Override
     public void exitTerminal(GrammarParser.TerminalContext ctx) {
+
+    }
+
+    @Override
+    public void enterTranslation_symbol(GrammarParser.Translation_symbolContext ctx) {
+        assert(nowInRhs);
+        lastRhs.add(new TranslationSymbol(ctx.TRANSLATION_SYMBOL().getText()));
+    }
+
+    @Override
+    public void exitTranslation_symbol(GrammarParser.Translation_symbolContext ctx) {
 
     }
 

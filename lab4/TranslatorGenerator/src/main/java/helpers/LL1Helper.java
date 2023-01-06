@@ -1,9 +1,6 @@
 package helpers;
 
-import grammar.GrammarItem;
-import grammar.NonTerminal;
-import grammar.Rule;
-import grammar.Terminal;
+import grammar.*;
 import lexicalAnalyzer.LexicalAnalyzer;
 
 import java.util.*;
@@ -33,14 +30,20 @@ public class LL1Helper {
 
     public Set<Terminal> firstOf(Rule rule) {
         Set<Terminal> result = new HashSet<>();
-        if (rule.getRhs().get(0) instanceof Terminal) {
-            result.add((Terminal) rule.getRhs().get(0));
-        } else {
-            result.addAll(first.get((NonTerminal) rule.getRhs().get(0)));
-        }
-        if (result.contains(EPS)) {
-            result.remove(EPS);
-            result.addAll(follow.get(rule.getLhs()));
+        for (int i = 0; i != rule.getRhs().size(); ++i) {
+            if (rule.getRhs().get(i) instanceof TranslationSymbol) {
+                continue;
+            }
+            if (rule.getRhs().get(i) instanceof Terminal) {
+                result.add((Terminal) rule.getRhs().get(i));
+            } else {
+                result.addAll(first.get((NonTerminal) rule.getRhs().get(i)));
+            }
+            if (result.contains(EPS)) {
+                result.remove(EPS);
+                result.addAll(follow.get(rule.getLhs()));
+            }
+            break;
         }
         return result;
     }
@@ -81,10 +84,16 @@ public class LL1Helper {
         while (true) {
             boolean changed = false;
             for (Rule rule : rules) {
-                if (rule.getRhs().get(0) instanceof Terminal) {
-                    changed |= addTerminal(first.get(rule.getLhs()), (Terminal) rule.getRhs().get(0));
-                } else {
-                    changed |= mergeTerminals(first.get(rule.getLhs()), first.get((NonTerminal) rule.getRhs().get(0)), false);
+                for (int i = 0; i != rule.getRhs().size(); ++i) {
+                    if (rule.getRhs().get(i) instanceof TranslationSymbol) {
+                        continue;
+                    }
+                    if (rule.getRhs().get(i) instanceof Terminal) {
+                        changed |= addTerminal(first.get(rule.getLhs()), (Terminal) rule.getRhs().get(i));
+                    } else {
+                        changed |= mergeTerminals(first.get(rule.getLhs()), first.get((NonTerminal) rule.getRhs().get(i)), false);
+                    }
+                    break;
                 }
             }
             if (!changed) {
@@ -99,18 +108,23 @@ public class LL1Helper {
             boolean changed = false;
             for (Rule rule : rules) {
                 for (int i = 0; i != rule.getRhs().size(); ++i) {
-                    if (rule.getRhs().get(i) instanceof Terminal) {
+                    if (!(rule.getRhs().get(i) instanceof NonTerminal nonTerminal)) {
                         continue;
                     }
-                    NonTerminal nonTerminal = (NonTerminal) rule.getRhs().get(i);
                     boolean checkFollow = false;
                     if (i + 1 != rule.getRhs().size()) {
-                        Set<Terminal> nextFirst;
-                        if (rule.getRhs().get(i + 1) instanceof Terminal) {
-                            nextFirst = new HashSet<>();
-                            nextFirst.add((Terminal) rule.getRhs().get(i + 1));
-                        } else {
-                            nextFirst = first.get((NonTerminal) rule.getRhs().get(i + 1));
+                        Set<Terminal> nextFirst = new HashSet<>();
+                        for (int j = i + 1; j < rule.getRhs().size(); ++j) {
+                            if (rule.getRhs().get(j) instanceof TranslationSymbol) {
+                                continue;
+                            }
+
+                            if (rule.getRhs().get(j) instanceof Terminal) {
+                                nextFirst.add((Terminal) rule.getRhs().get(j));
+                            } else {
+                                nextFirst = first.get((NonTerminal) rule.getRhs().get(j));
+                            }
+                            break;
                         }
                         if (nextFirst.contains(EPS)) {
                             checkFollow = true;

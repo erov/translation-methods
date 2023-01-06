@@ -20,7 +20,7 @@ public class Tree {
     private final List<Tree> children = new ArrayList<>();
     private Type type;
 
-    private Map<String, String> attr = new HashMap<>();
+    public Map<String, String> synthesizedAttr = new HashMap<>();
 
 
     private class Edge {
@@ -49,6 +49,10 @@ public class Tree {
     public Tree(final GrammarItem node, final Type type) {
         this.node = node;
         this.type = type;
+    }
+
+    public GrammarItem getNode() {
+        return node;
     }
 
     public void addChild(final Tree child) {
