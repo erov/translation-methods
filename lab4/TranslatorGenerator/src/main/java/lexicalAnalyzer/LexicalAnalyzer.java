@@ -81,10 +81,18 @@ public class LexicalAnalyzer {
             return;
         }
 
-        Terminal greedy = previousMatches.get(0);
+        Terminal dummy = new Terminal(previousMatches.get(0), "");
+        Terminal greedy = dummy;
         for (Terminal terminal : previousMatches) {
-            if (terminal.getParsedValue().length() > greedy.getParsedValue().length()) {
+            if (terminal.getParsedValue().length() > greedy.getParsedValue().length() && !terminal.isRegexp()) {
                 greedy = terminal;
+            }
+        }
+        if (greedy == dummy) {
+            for (Terminal terminal : previousMatches) {
+                if (terminal.getParsedValue().length() > greedy.getParsedValue().length()) {
+                    greedy = terminal;
+                }
             }
         }
 

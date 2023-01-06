@@ -309,5 +309,69 @@ public class KotlinArrayTest extends AbstractTest {
         assert(true);
     }
 
+    @Test
+    public void test_25_simple_map() {
+        Tree tree = parse("sample/KotlinArray.grammar", "d", "var map: Map<String, Int>;");
+        assert(tree.walkthrough().equals(
+                List.of(
+                        new Terminal("var", false),
+                        new Terminal("[a-zA-Z0-9]+", true),
+                        new Terminal(":", false),
+                        new Terminal("Map", false),
+                        new Terminal("<", false),
+                        new Terminal("[a-zA-Z0-9]+", true),
+                        new Terminal(",", false),
+                        new Terminal("[a-zA-Z0-9]+", true),
+                        new Terminal(">", false),
+                        new Terminal(";", false)
+                )
+        ));
+    }
 
+    @Test
+    public void test_26_array_of_map() {
+        Tree tree = parse("sample/KotlinArray.grammar", "d", "var array: Array<Map<String, Int>>;");
+        assert(tree.walkthrough().equals(
+                List.of(
+                        new Terminal("var", false),
+                        new Terminal("[a-zA-Z0-9]+", true),
+                        new Terminal(":", false),
+                        new Terminal("Array", false),
+                        new Terminal("<", false),
+                        new Terminal("Map", false),
+                        new Terminal("<", false),
+                        new Terminal("[a-zA-Z0-9]+", true),
+                        new Terminal(",", false),
+                        new Terminal("[a-zA-Z0-9]+", true),
+                        new Terminal(">", false),
+                        new Terminal(">", false),
+                        new Terminal(";", false)
+                )
+        ));
+    }
+
+    @Test
+    public void test_27_map_of_arrays() {
+        Tree tree = parse("sample/KotlinArray.grammar", "d", "var map: Map<Array<Int>, Array<String>>;");
+        assert(tree.walkthrough().equals(
+                List.of(
+                        new Terminal("var", false),
+                        new Terminal("[a-zA-Z0-9]+", true),
+                        new Terminal(":", false),
+                        new Terminal("Map", false),
+                        new Terminal("<", false),
+                        new Terminal("Array", false),
+                        new Terminal("<", false),
+                        new Terminal("[a-zA-Z0-9]+", true),
+                        new Terminal(">", false),
+                        new Terminal(",", false),
+                        new Terminal("Array", false),
+                        new Terminal("<", false),
+                        new Terminal("[a-zA-Z0-9]+", true),
+                        new Terminal(">", false),
+                        new Terminal(">", false),
+                        new Terminal(";", false)
+                )
+        ));
+    }
 }

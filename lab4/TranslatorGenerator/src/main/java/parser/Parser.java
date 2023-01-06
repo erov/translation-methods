@@ -138,16 +138,31 @@ public class Parser {
     private void throwParseException(final Collection<Terminal> expectedTerminals) throws ParseException {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Expected one of tokens: {");
+        boolean first = true;
         for (Terminal terminal : expectedTerminals) {
+            if (!first) {
+                stringBuilder.append(", ");
+            } else {
+                first = false;
+            }
             stringBuilder
+                    .append("'")
                     .append(terminal.getValue())
-                    .append(' ');
+                    .append("'");
         }
         stringBuilder
                 .append("} , at position ")
                 .append(lexicalAnalyzer.getPosition())
                 .append(", but found ")
-                .append(lexicalAnalyzer.getToken().getValue());
+                .append("'")
+                .append(lexicalAnalyzer.getToken().getValue())
+                .append("'");
+        if (lexicalAnalyzer.getToken().isRegexp()) {
+            stringBuilder
+                    .append(" with parsed value: '")
+                    .append(lexicalAnalyzer.getToken().getParsedValue())
+                    .append("'");
+        }
 
         throw new ParseException(stringBuilder.toString());
     }
