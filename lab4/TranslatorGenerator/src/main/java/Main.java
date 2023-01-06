@@ -17,8 +17,39 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import static java.lang.System.exit;
+
 public class Main {
+    private static void printErrorMsg() {
+        System.err.println("Usage: java TranslatorGenerator <grammar file> <input string> <starting non-terminal name> [--tree=<graphviz file>] [--result-attr=<result attribute name>]");
+        exit(1);
+    }
     public static void main(String[] args) {
+        if (args.length > 5) {
+            printErrorMsg();
+        }
+
+        String graphvizFile = null;
+        String resultAttribute = null;
+        for (int i = 3; i != 5; ++i) {
+            if (args.length > i) {
+                boolean found = false;
+                if (args[i].startsWith("--tree=")) {
+                    graphvizFile = args[i].substring(args[i].indexOf('=') + 1);
+                    found = true;
+                } else if (args[i].startsWith("--result-attr=")) {
+                    resultAttribute = args[i].substring(args[i].indexOf('=') + 1);
+                    found = true;
+                }
+
+                if (!found) {
+                    printErrorMsg();
+                }
+            } else {
+                break;
+            }
+        }
+
         final StringBuilder stringBuilder = new StringBuilder();
 
         try (Scanner scanner = new Scanner(new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), StandardCharsets.UTF_8)))) {
@@ -42,38 +73,23 @@ public class Main {
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, GrammarContext);
 
-//        System.err.println(listener);
-
         List<Rule> rules = listener.getRules();
         Set<Terminal> terminals = listener.getTerminals();
 
+        System.out.println("----- Parsed grammar rules -----");
         for (Rule rule : rules) {
             System.out.printf("%s: %s%n", rule.getLhs(), rule.getRhs());
         }
 
-        System.out.println("\nTerminals:");
+        System.out.println("\n----- Grammar terminals -----");
         for (Terminal terminal : terminals) {
             System.out.println(terminal);
         }
 
-        System.out.println("\nSample:");
-        String sample = "(132 + 131) / 200 * 9993 - 56 * 7 / 1 * (0 - 1)";
+        String sample = args[1];
+        System.out.printf("\n----- Input String -----\n%s", sample);
 
-        try {
-            LexicalAnalyzer.checkLexicalAnalyzer(terminals, sample);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println();
-
-        NonTerminal start = null;
-        for (NonTerminal nonTerminal : listener.getNonTerminals()) {
-            if (nonTerminal.getValue().equals("e")) {
-                start = nonTerminal;
-                break;
-            }
-        }
-
+        NonTerminal start = new NonTerminal(args[2]);
         LL1Helper ll1Helper = new LL1Helper(rules, start);
         System.out.println(ll1Helper);
 
@@ -82,22 +98,15 @@ public class Main {
             LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(terminals, sample);
             Parser parser = new Parser(lexicalAnalyzer, ll1Helper);
             tree = parser.parse(start, Map.of());
-            tree.walkthroughGraphviz("visualizer/test.dot");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
-        System.err.println(tree.synthesizedAttr.get("e_0.result"));
-
-
-//        if (args.length == 2) {
-//            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[1]), StandardCharsets.UTF_8))) {
-//                writer.write(listener.getResult());
-//            } catch (IOException e) {
-//                System.err.println("Error occurred while writing result into file");
-//            }
-//        } else {
-//            System.out.println(listener.getResult());
-//        }
+        if (graphvizFile != null) {
+            tree.walkthroughGraphviz(graphvizFile);
+        }
+        if (resultAttribute != null) {
+            System.err.println(tree.synthesizedAttr.get(resultAttribute));
+        }
     }
 }

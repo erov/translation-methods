@@ -99,7 +99,6 @@ public class LexicalAnalyzer {
         for (int i = 0; i < stringBuilder.length() - greedy.getParsedValue().length(); ++i) {
             rollback();
         }
-//        System.err.printf("After rollback: CurrentChar: %s, current position: %d%n", currentChar, currentPosition);
 
         currentToken = greedy;
     }

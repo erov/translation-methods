@@ -57,12 +57,12 @@ public class LL1Helper {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("First:\n");
+        stringBuilder.append("----- Specified grammar First sets -----\n");
         for (Map.Entry<NonTerminal, Set<Terminal>> entry : first.entrySet()) {
             stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue().toString()).append("\n");
         }
 
-        stringBuilder.append("\nFollow:\n");
+        stringBuilder.append("\n----- Specified grammar Follow sets -----\n");
         for (Map.Entry<NonTerminal, Set<Terminal>> entry : follow.entrySet()) {
             stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue().toString()).append("\n");
         }
