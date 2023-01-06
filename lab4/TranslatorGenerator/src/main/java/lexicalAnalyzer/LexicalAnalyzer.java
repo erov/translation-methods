@@ -75,7 +75,7 @@ public class LexicalAnalyzer {
 
         if (previousMatches.isEmpty()) {
             if (currentPosition != inputString.length() + 1) {
-                throw new ParseException(String.format("Found unexpected symbol %s at position %d", currentChar, currentPosition));
+                throw new ParseException(String.format("Found unexpected symbol '%s' at position %d", currentChar, currentPosition));
             }
             currentToken = END;
             return;

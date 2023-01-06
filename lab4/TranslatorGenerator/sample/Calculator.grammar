@@ -1,10 +1,15 @@
-e -> t e_prime
-e_prime -> '+' t e_prime
-e_prime -> '-' t e_prime
+e -> t e_prime {
+    e_0.result = e_prime_2.result
+    e_prime_2.lhs = t_1.result
+}
+e_prime -> '+' t $ADD e_prime {
+    $ADD.op0 = e_prime_0.lhs
+    $ADD.op1 = t_2.result
+    e_prime_4.lhs = $ADD.result
+    e_prime_0.result = e_prime_4.result
+}
 e_prime -> ''
-t -> f t_prime
-t_prime -> '*' f t_prime
-t_prime -> '/' f t_prime
-t_prime -> ''
-f -> [0-9]+
-f -> '(' e ')'
+t -> [0-9]+
+t -> '(' e ')' {
+    t_0.result = e_2.result
+}

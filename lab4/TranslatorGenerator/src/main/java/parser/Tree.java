@@ -11,12 +11,16 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Tree {
     private final GrammarItem node;
     private final List<Tree> children = new ArrayList<>();
     private Type type;
+
+    private Map<String, String> attr = new HashMap<>();
 
 
     private class Edge {

@@ -5,16 +5,28 @@ file: (grammar_rule NEWLINE+)*;
 
 grammar_rule: parser_rule | lexer_rule;
 lexer_rule: non_terminal ARROW terminal;
-parser_rule: non_terminal ARROW (non_terminal | terminal) (non_terminal | terminal)+;
+parser_rule: non_terminal ARROW (non_terminal | terminal | translation_symbol) (non_terminal | terminal | translation_symbol)+ (FLPAREN NEWLINE? attr_assign FRPAREN)?;
 
 non_terminal: NON_TERMINAL;
-NON_TERMINAL: [a-z0-9_]+;
+NON_TERMINAL: [a-zA-Z0-9_]+;
 
 terminal: STRING | REGEXP;
 STRING: '\'' [a-zA-Z0-9~!@#$%^&*()_+\-=\\/]* '\'';
 REGEXP: '[' [a-zA-Z0-9~!@#$%^&*()_+\-=\\/]* ']' ('+' | '*' | '?');
 
+translation_symbol: TRANSLATION_SYMBOL;
+TRANSLATION_SYMBOL: '$' [A-Z]+;
 
-NEWLINE: ('\r'? '\n' | '\r');
+attr_assign: (attr_assign_line NEWLINE)+;
+attr_assign_line: ATTRIBUTE SKIP_EQ ATTRIBUTE;
+ATTRIBUTE: [a-zA-Z0-9_.$]+;
+
+
+NEWLINE: ('\r'? '\n' | '\r')+;
 WHITESPACE: [ \t]+ -> skip;
 ARROW: '->';
+FLPAREN: '{';
+FRPAREN: '}';
+SKIP_EQ: '=';
+
+

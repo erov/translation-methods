@@ -41,7 +41,7 @@ public class Main {
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, GrammarContext);
 
-//        System.out.println(listener);
+//        System.err.println(listener);
 
         List<Rule> rules = listener.getRules();
         Set<Terminal> terminals = listener.getTerminals();
@@ -56,7 +56,9 @@ public class Main {
         }
 
         System.out.println("\nSample:");
-        String sample = "10 + 245 * 303 - (10 + 211 +30/3)";
+        String sample = "1 + 2 + 3 + 4 + 5"; // -13
+        // 1 - (2 - (3 - (4 - 5))) = 3
+        // 1 - 2 - 3 - 4 - 5
         try {
             LexicalAnalyzer.checkLexicalAnalyzer(terminals, sample);
         } catch (ParseException e) {

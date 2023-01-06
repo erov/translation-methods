@@ -1,10 +1,7 @@
 import grammar.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GrammarSimpleListener extends GrammarBaseListener {
     private final StringBuilder stringBuilder = new StringBuilder();
@@ -17,17 +14,18 @@ public class GrammarSimpleListener extends GrammarBaseListener {
     private String lastLhs;
     private List<GrammarItem> lastRhs;
     private Type lastRuleType;
+    private List<String> lastAttributeAssignment;
 
 
     @Override
     public void enterGrammar_rule(GrammarParser.Grammar_ruleContext ctx) {
-        nowInRhs = false;
         lastRhs = new ArrayList<>();
     }
 
     @Override
     public void exitGrammar_rule(GrammarParser.Grammar_ruleContext ctx) {
         rules.add(new Rule(lastLhs, lastRhs, lastRuleType));
+        nowInRhs = false;
     }
 
 
@@ -46,6 +44,7 @@ public class GrammarSimpleListener extends GrammarBaseListener {
     public void enterParser_rule(GrammarParser.Parser_ruleContext ctx) {
         lastLhs = ctx.non_terminal(0).getText();
         lastRuleType = Type.PARSER;
+        lastAttributeAssignment = new ArrayList<>();
     }
 
     @Override
@@ -75,11 +74,37 @@ public class GrammarSimpleListener extends GrammarBaseListener {
 
     }
 
+    @Override
+    public void enterAttr_assign_line(GrammarParser.Attr_assign_lineContext ctx) {
+
+    }
+
+    @Override
+    public void exitAttr_assign_line(GrammarParser.Attr_assign_lineContext ctx) { }
+
 
     @Override
     public void visitTerminal(TerminalNode node) {
         if (node.getSymbol().getType() == GrammarParser.ARROW) {
             nowInRhs = true;
+            return;
+        }
+
+        if (node.getSymbol().getType() == GrammarParser.FLPAREN) {
+            nowInRhs = false;
+            return;
+        }
+
+        if (node.getSymbol().getType() == GrammarParser.FRPAREN) {
+            return;
+        }
+
+        if (node.getSymbol().getType() == GrammarParser.ATTRIBUTE) {
+            lastAttributeAssignment.add(node.getText());
+            return;
+        }
+
+        if (node.getSymbol().getType() == GrammarParser.SKIP_EQ) {
             return;
         }
 
