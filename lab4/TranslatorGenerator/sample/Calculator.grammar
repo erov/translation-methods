@@ -36,7 +36,20 @@ t_prime -> '/' f $DIV t_prime {
 t_prime -> '' {
     t_prime_0.result = t_prime_0.lhs
 }
-f -> [0-9]+
-f -> '(' e ')' {
-    f_0.result = e_2.result
+f -> n fact {
+    fact_2.arg = n_1.result
+    f_0.result = fact_2.result
+}
+f -> '(' e ')' fact {
+    fact_4.arg = e_2.result
+    f_0.result = fact_4.result
+}
+n -> [0-9]+
+fact -> '' {
+    fact_0.result = fact_0.arg
+}
+fact -> '!' $FACT fact {
+    $FACT.op0 = fact_0.arg
+    fact_3.arg = $FACT.result
+    fact_0.result = fact_3.result
 }

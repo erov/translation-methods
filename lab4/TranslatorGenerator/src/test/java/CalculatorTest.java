@@ -243,4 +243,34 @@ public class CalculatorTest extends AbstractTest {
         }
         assert(true);
     }
+
+    @Test
+    public void test_24_simpleFactorial() {
+        Tree tree = parse("sample/Calculator.grammar", "e", "5!");
+        assert(tree.synthesizedAttr.get("e_0.result").equals("120"));
+    }
+
+    @Test
+    public void test_25_arithmeticFactorial() {
+        Tree tree = parse("sample/Calculator.grammar", "e", "1 - 3! - 2");
+        assert(tree.synthesizedAttr.get("e_0.result").equals("-7"));
+    }
+
+    @Test
+    public void test_26_expressionFactorial() {
+        Tree tree = parse("sample/Calculator.grammar", "e", "(2 * 2! + 1)! - 120");
+        assert(tree.synthesizedAttr.get("e_0.result").equals("0"));
+    }
+
+    @Test
+    public void test_27_multipleFactorial() {
+        Tree tree = parse("sample/Calculator.grammar", "e", "3!!");
+        assert(tree.synthesizedAttr.get("e_0.result").equals("720"));
+    }
+
+    @Test
+    public void test_28_multipleExpressionFactorial() {
+        Tree tree = parse("sample/Calculator.grammar", "e", "2!!!!!!!!!!!!");
+        assert(tree.synthesizedAttr.get("e_0.result").equals("2"));
+    }
 }
